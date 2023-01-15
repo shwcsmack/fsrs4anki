@@ -3,7 +3,7 @@ set_version();
 // The latest version will be released on https://github.com/open-spaced-repetition/fsrs4anki
 
 // Default parameters of FSRS4Anki for global
-var w = [1, 1, 5, -0.5, -0.5, 0.2, 1.4, -0.12, 0.8, 2, -0.2, 0.2, 1];
+var w = [0.9463, 1.0437, 5.0312, -0.546, -0.5623, 0.1471, 1.3935, -0.0287, 0.7929, 1.9173, -0.2823, 0.4902, 0.9215];
 // The above parameters can be optimized via FSRS4Anki optimizer.
 
 // User's custom parameters for global
@@ -25,16 +25,8 @@ debugger;
 if (document.getElementById("deck") !== null) {
     const deck_name = document.getElementById("deck").getAttribute("deck_name");
     // parameters for a specific deck
-    if (deck_name == "ALL::Learning::English::Reading") {
-        var w = [1.1475, 1.401, 5.1483, -1.4221, -1.2282, 0.035, 1.4668, -0.1286, 0.7539, 1.9671, -0.2307, 0.32, 0.9451];
-        // User's custom parameters for the specific deck
-        requestRetention = 0.9;
-        maximumInterval = 36500;
-        easyBonus = 1.3;
-        hardInterval = 1.2;
-    // parameters for a deck's all sub-decks
-    } else if (deck_name.startsWith("ALL::Archive")) {
-        var w = [1.2879, 0.5135, 4.9532, -1.502, -1.0922, 0.0081, 1.3771, -0.0294, 0.6718, 1.8335, -0.4066, 0.7291, 0.5517];
+    if (deck_name.startsWith("Korean")) {
+        var w = [0.9493, 1.0156, 5.1253, -0.7072, -0.6966, 0.0179, 1.3588, -0.01, 0.7558, 1.7931, -0.4057, 0.3616, 0.8049];
         // User's custom parameters for sub-decks
         requestRetention = 0.9;
         maximumInterval = 36500;
@@ -49,10 +41,10 @@ const intervalModifier = Math.log(requestRetention) / Math.log(0.9);
 const fuzz_factor = set_fuzz_factor();
 
 const ratings = {
-  "again": 1,
-  "hard": 2,
-  "good": 3,
-  "easy": 4
+    "again": 1,
+    "hard": 2,
+    "good": 3,
+    "easy": 4
 };
 
 // For new cards
@@ -66,7 +58,7 @@ if (is_new()) {
     if (states.easy.normal?.review) {
         states.easy.normal.review.scheduledDays = easy_interval;
     }
-// For learning/relearning cards
+    // For learning/relearning cards
 } else if (is_learning()) {
     // Init states if the card didn't contain customData
     if (is_empty()) {
@@ -80,7 +72,7 @@ if (is_new()) {
     if (states.easy.normal?.review) {
         states.easy.normal.review.scheduledDays = easy_interval;
     }
-// For review cards
+    // For review cards
 } else if (is_review()) {
     // Convert the interval and factor to stability and difficulty if the card didn't contain customData
     if (is_empty()) {
@@ -144,9 +136,9 @@ function mean_reversion(init, current) {
 
 function next_recall_stability(d, s, r) {
     return +(s * (1 + Math.exp(w[6]) *
-    (11 - d) *
-    Math.pow(s, w[7]) *
-    (Math.exp((1 - r) * w[8]) - 1))).toFixed(2);
+        (11 - d) *
+        Math.pow(s, w[7]) *
+        (Math.exp((1 - r) * w[8]) - 1))).toFixed(2);
 }
 
 function next_forget_stability(d, s, r) {
@@ -198,7 +190,7 @@ function is_new() {
         if (Object.hasOwn(states.current.filtered?.rescheduling?.originalState, 'new')) {
             return true;
         }
-    } 
+    }
     return false;
 }
 
@@ -254,7 +246,7 @@ function set_version() {
 
 function set_fuzz_factor() {
     // Note: Originally copied from seedrandom.js package (https://github.com/davidbau/seedrandom)
-    !function(f,a,c){var s,l=256,p="random",d=c.pow(l,6),g=c.pow(2,52),y=2*g,h=l-1;function n(n,t,r){function e(){for(var n=u.g(6),t=d,r=0;n<g;)n=(n+r)*l,t*=l,r=u.g(1);for(;y<=n;)n/=2,t/=2,r>>>=1;return(n+r)/t}var o=[],i=j(function n(t,r){var e,o=[],i=typeof t;if(r&&"object"==i)for(e in t)try{o.push(n(t[e],r-1))}catch(n){}return o.length?o:"string"==i?t:t+"\0"}((t=1==t?{entropy:!0}:t||{}).entropy?[n,S(a)]:null==n?function(){try{var n;return s&&(n=s.randomBytes)?n=n(l):(n=new Uint8Array(l),(f.crypto||f.msCrypto).getRandomValues(n)),S(n)}catch(n){var t=f.navigator,r=t&&t.plugins;return[+new Date,f,r,f.screen,S(a)]}}():n,3),o),u=new m(o);return e.int32=function(){return 0|u.g(4)},e.quick=function(){return u.g(4)/4294967296},e.double=e,j(S(u.S),a),(t.pass||r||function(n,t,r,e){return e&&(e.S&&v(e,u),n.state=function(){return v(u,{})}),r?(c[p]=n,t):n})(e,i,"global"in t?t.global:this==c,t.state)}function m(n){var t,r=n.length,u=this,e=0,o=u.i=u.j=0,i=u.S=[];for(r||(n=[r++]);e<l;)i[e]=e++;for(e=0;e<l;e++)i[e]=i[o=h&o+n[e%r]+(t=i[e])],i[o]=t;(u.g=function(n){for(var t,r=0,e=u.i,o=u.j,i=u.S;n--;)t=i[e=h&e+1],r=r*l+i[h&(i[e]=i[o=h&o+t])+(i[o]=t)];return u.i=e,u.j=o,r})(l)}function v(n,t){return t.i=n.i,t.j=n.j,t.S=n.S.slice(),t}function j(n,t){for(var r,e=n+"",o=0;o<e.length;)t[h&o]=h&(r^=19*t[h&o])+e.charCodeAt(o++);return S(t)}function S(n){return String.fromCharCode.apply(0,n)}if(j(c.random(),a),"object"==typeof module&&module.exports){module.exports=n;try{s=require("crypto")}catch(n){}}else"function"==typeof define&&define.amd?define(function(){return n}):c["seed"+p]=n}("undefined"!=typeof self?self:this,[],Math);
+    !function (f, a, c) { var s, l = 256, p = "random", d = c.pow(l, 6), g = c.pow(2, 52), y = 2 * g, h = l - 1; function n(n, t, r) { function e() { for (var n = u.g(6), t = d, r = 0; n < g;)n = (n + r) * l, t *= l, r = u.g(1); for (; y <= n;)n /= 2, t /= 2, r >>>= 1; return (n + r) / t } var o = [], i = j(function n(t, r) { var e, o = [], i = typeof t; if (r && "object" == i) for (e in t) try { o.push(n(t[e], r - 1)) } catch (n) { } return o.length ? o : "string" == i ? t : t + "\0" }((t = 1 == t ? { entropy: !0 } : t || {}).entropy ? [n, S(a)] : null == n ? function () { try { var n; return s && (n = s.randomBytes) ? n = n(l) : (n = new Uint8Array(l), (f.crypto || f.msCrypto).getRandomValues(n)), S(n) } catch (n) { var t = f.navigator, r = t && t.plugins; return [+new Date, f, r, f.screen, S(a)] } }() : n, 3), o), u = new m(o); return e.int32 = function () { return 0 | u.g(4) }, e.quick = function () { return u.g(4) / 4294967296 }, e.double = e, j(S(u.S), a), (t.pass || r || function (n, t, r, e) { return e && (e.S && v(e, u), n.state = function () { return v(u, {}) }), r ? (c[p] = n, t) : n })(e, i, "global" in t ? t.global : this == c, t.state) } function m(n) { var t, r = n.length, u = this, e = 0, o = u.i = u.j = 0, i = u.S = []; for (r || (n = [r++]); e < l;)i[e] = e++; for (e = 0; e < l; e++)i[e] = i[o = h & o + n[e % r] + (t = i[e])], i[o] = t; (u.g = function (n) { for (var t, r = 0, e = u.i, o = u.j, i = u.S; n--;)t = i[e = h & e + 1], r = r * l + i[h & (i[e] = i[o = h & o + t]) + (i[o] = t)]; return u.i = e, u.j = o, r })(l) } function v(n, t) { return t.i = n.i, t.j = n.j, t.S = n.S.slice(), t } function j(n, t) { for (var r, e = n + "", o = 0; o < e.length;)t[h & o] = h & (r ^= 19 * t[h & o]) + e.charCodeAt(o++); return S(t) } function S(n) { return String.fromCharCode.apply(0, n) } if (j(c.random(), a), "object" == typeof module && module.exports) { module.exports = n; try { s = require("crypto") } catch (n) { } } else "function" == typeof define && define.amd ? define(function () { return n }) : c["seed" + p] = n }("undefined" != typeof self ? self : this, [], Math);
     // MIT License
     // Copyright 2019 David Bau.
     // Permission is hereby granted, free of charge, to any person obtaining a copy
